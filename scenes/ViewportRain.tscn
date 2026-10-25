@@ -19,24 +19,24 @@ shader_parameter/tint_boost = Vector3(0, 0.008, 0.028)
 
 [sub_resource type="ShaderMaterial" id="2"]
 shader = ExtResource("1")
-shader_parameter/cols = 130.0
+shader_parameter/cols = 84.0
 shader_parameter/speed = 4.0
-shader_parameter/density = 0.45
-shader_parameter/length = 0.78
-shader_parameter/width = 0.85
+shader_parameter/density = 0.5
+shader_parameter/length = 0.4
+shader_parameter/width = 0.18
 shader_parameter/slant = -0.14
 shader_parameter/intensity = 0.05
 shader_parameter/tint = Vector3(0.44, 0.56, 0.78)
 
 [sub_resource type="ShaderMaterial" id="3"]
 shader = ExtResource("1")
-shader_parameter/cols = 44.0
+shader_parameter/cols = 48.0
 shader_parameter/speed = 4.0
-shader_parameter/density = 0.5
-shader_parameter/length = 0.72
-shader_parameter/width = 0.3
+shader_parameter/density = 0.55
+shader_parameter/length = 0.55
+shader_parameter/width = 0.26
 shader_parameter/slant = -0.14
-shader_parameter/intensity = 0.18
+shader_parameter/intensity = 0.13
 shader_parameter/tint = Vector3(0.72, 0.82, 0.95)
 
 [sub_resource type="ShaderMaterial" id="4"]
@@ -47,7 +47,7 @@ shader_parameter/speed = 0.3
 shader_parameter/length = 0.45
 shader_parameter/width = 0.12
 shader_parameter/head_scale = 0.01
-shader_parameter/intensity = 0.26
+shader_parameter/intensity = 0.14
 shader_parameter/magnify = 0.85
 shader_parameter/soft_blur = 3.2
 shader_parameter/pixel_size = Vector2(0.00078125, 0.00138889)
@@ -61,7 +61,7 @@ shader_parameter/speed = 0.4
 shader_parameter/length = 0.42
 shader_parameter/width = 0.22
 shader_parameter/head_scale = 0.018
-shader_parameter/intensity = 0.38
+shader_parameter/intensity = 0.19
 shader_parameter/magnify = 0.72
 shader_parameter/soft_blur = 4.5
 shader_parameter/pixel_size = Vector2(0.00078125, 0.00138889)
@@ -69,14 +69,6 @@ shader_parameter/tint = Vector3(0.75, 0.87, 1.0)
 
 [node name="ViewportRain" type="CanvasLayer"]
 layer = 100
-
-[node name="BlurPatches" type="ColorRect" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-material = SubResource("1")
 
 [node name="StreakMist" type="ColorRect" parent="."]
 anchors_preset = 15
@@ -109,3 +101,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 material = SubResource("5")
+
+[node name="BlurPatches" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+material = SubResource("1")

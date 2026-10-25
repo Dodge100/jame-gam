@@ -10,10 +10,16 @@ const MAX_SURFACE_Y := 600.0
 const BOTTOM_Y := 760.0
 const GENERATE_AHEAD := 1400.0
 const KEEP_BEHIND := 400.0
+# storm debris: rain-born leaves fall into fresh spans and swing in the wind
+const LEAF_SCENE := preload("res://scenes/Leaf.tscn")
+const LEAF_LIFT_MIN := 240.0
+const LEAF_LIFT_MAX := 370.0
+const LEAF_SPAWN_MARGIN := 40.0
 
 var _rng := RandomNumberGenerator.new()
 var _segments: Array[StaticBody2D] = []
 var _branches: Array[StaticBody2D] = []
+var _leaves: Array[Node2D] = []
 var _next_x := START_X + START_WIDTH
 var _last_y := START_Y
 
@@ -47,6 +53,15 @@ func stream_to(view_left: float, view_right: float) -> void:
 	while not _branches.is_empty() and _branches[0].position.x + 340.0 < view_left - KEEP_BEHIND:
 		_branches.pop_front().queue_free()
 
+	# leaves drift both ways, sweep the whole tracked list every call
+	for i in range(_leaves.size() - 1, -1, -1):
+		var leaf: Node2D = _leaves[i]
+		if not is_instance_valid(leaf):
+			_leaves.remove_at(i)
+		elif leaf.position.x < view_left - KEEP_BEHIND or leaf.position.x > view_right + GENERATE_AHEAD:
+			leaf.queue_free()
+			_leaves.remove_at(i)
+
 func _add_branch(at: Vector2) -> void:
 	var branch: StaticBody2D = BRANCH_SCENE.instantiate()
 	branch.position = at
@@ -77,5 +92,25 @@ func _add_segment(x: float, y: float, width: float) -> void:
 	top_line.color = Color(0.3, 0.36, 0.46, 0.3)
 	segment.add_child(top_line)
 
+	# leaves go in before the segment draw so the ground hides what lands
+	_scatter_leaves(x, y, width)
+
 	add_child(segment)
 	_segments.append(segment)
+
+# scatter rain leaves over the fresh span, above and behind the ground fill
+func _scatter_leaves(x: float, surface_y: float, width: float) -> void:
+	var count := 0
+	if _rng.randf() < 0.75:
+		count += 1
+	if _rng.randf() < 0.25:
+		count += 1
+	for i in count:
+		var leaf: Node2D = LEAF_SCENE.instantiate()
+		leaf.position = Vector2(
+			x + _rng.randf_range(LEAF_SPAWN_MARGIN, width - LEAF_SPAWN_MARGIN),
+			surface_y - _rng.randf_range(LEAF_LIFT_MIN, LEAF_LIFT_MAX)
+		)
+		leaf.setup(surface_y, x, x + width)
+		add_child(leaf)
+		_leaves.append(leaf)

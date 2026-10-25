@@ -81,17 +81,17 @@ points = PackedVector2Array(10, -6.5, 13.8, -10, 14.6, -13.6)
 width = 1.1
 default_color = Color(0.17, 0.14, 0.115, 1)
 
-[node name="Eye" type="ColorRect" parent="Visual"]
+[node name="EyeShade" type="ColorRect" parent="Visual"]
 position = Vector2(10.2, -5.6)
 size = Vector2(2, 2)
 color = Color(0.55, 0.66, 0.8, 0.85)
 
-[node name="AntennaL" type="Line2D" parent="Visual"]
+[node name="AntennaLShade" type="Line2D" parent="Visual"]
 points = PackedVector2Array(8, -7.6, 10.5, -11, 10, -14.5)
 width = 1.1
 default_color = Color(0.09, 0.075, 0.06, 1)
 
-[node name="AntennaR" type="Line2D" parent="Visual"]
+[node name="AntennaRShade" type="Line2D" parent="Visual"]
 points = PackedVector2Array(10, -6.5, 13.8, -10, 14.6, -13.6)
 width = 1.1
 default_color = Color(0.09, 0.075, 0.06, 1)
