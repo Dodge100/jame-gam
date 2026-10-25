@@ -1,5 +1,7 @@
 extends Node2D
 
+const BRANCH_SCENE: PackedScene = preload("res://scenes/Branch.tscn")
+const BRANCH_SCALE := Vector2(1.7, 1.7)
 const START_X := -400.0
 const START_WIDTH := 1300.0
 const START_Y := 600.0
@@ -11,12 +13,14 @@ const KEEP_BEHIND := 400.0
 
 var _rng := RandomNumberGenerator.new()
 var _segments: Array[StaticBody2D] = []
+var _branches: Array[StaticBody2D] = []
 var _next_x := START_X + START_WIDTH
 var _last_y := START_Y
 
 func _ready() -> void:
 	_rng.randomize()
 	_add_segment(START_X, START_Y, START_WIDTH)
+	_add_branch(Vector2(390, 245))
 
 func stream_to(view_left: float, view_right: float) -> void:
 	while _next_x < view_right + GENERATE_AHEAD:
@@ -29,6 +33,8 @@ func stream_to(view_left: float, view_right: float) -> void:
 		if surface_y < _last_y:
 			gap = minf(gap, 120.0)
 		_next_x += gap
+		if _rng.randf() < 0.6:
+			_add_branch(Vector2(_next_x + _rng.randf_range(-120.0, 220.0), _rng.randf_range(170.0, 310.0)))
 		var width := _rng.randf_range(280.0, 560.0)
 		_add_segment(_next_x, surface_y, width)
 		_next_x += width
@@ -37,6 +43,16 @@ func stream_to(view_left: float, view_right: float) -> void:
 	while not _segments.is_empty() and float(_segments[0].get_meta("right")) < view_left - KEEP_BEHIND:
 		var old_segment: StaticBody2D = _segments.pop_front()
 		old_segment.queue_free()
+
+	while not _branches.is_empty() and _branches[0].position.x + 340.0 < view_left - KEEP_BEHIND:
+		_branches.pop_front().queue_free()
+
+func _add_branch(at: Vector2) -> void:
+	var branch: StaticBody2D = BRANCH_SCENE.instantiate()
+	branch.position = at
+	branch.scale = BRANCH_SCALE
+	add_child(branch)
+	_branches.append(branch)
 
 func _add_segment(x: float, y: float, width: float) -> void:
 	var segment := StaticBody2D.new()

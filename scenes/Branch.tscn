@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Texture2D" uid="uid://dnvases7qypkb" path="res://assets/sakura-branch.png" id="1"]
+
+[sub_resource type="OccluderPolygon2D" id="RainShield"]
+polygon = PackedVector2Array(0, 40, 20, 24, 55, 4, 155, 0, 200, 12, 200, 28, 160, 20, 120, 17, 80, 20, 50, 32, 20, 42, 0, 54)
+
+[node name="Branch" type="StaticBody2D"]
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1")
+texture_filter = 1
+centered = false
+
+[node name="Collision" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(0, 47, 20, 34, 50, 21, 80, 9, 120, 6, 160, 9, 200, 18, 200, 28, 160, 20, 120, 17, 80, 20, 50, 32, 20, 42, 0, 54)
+
+[node name="RainShield" type="LightOccluder2D" parent="."]
+occluder = SubResource("RainShield")
+occluder_light_mask = 0
+sdf_collision = true

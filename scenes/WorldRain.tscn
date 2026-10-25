@@ -21,15 +21,19 @@ emission_box_extents = Vector3(950, 310, 4)
 direction = Vector3(-0.24, 1, 0)
 spread = 0.2
 angle = Vector2(-13.7, -13.7)
-initial_velocity = 1500.0
+initial_velocity_min = 1500.0
+initial_velocity_max = 1500.0
 initial_velocity_randomness = 0.3
 gravity = Vector3(-231.5, 950, 0)
 scale_min = 0.8
 scale_max = 1.4
 color = Color(0.78, 0.9, 1.0, 0.5)
-
+collision_mode = 2
+collision_use_scale = true
 [node name="WorldRain" type="GPUParticles2D"]
+local_coords = true
 material = SubResource("3")
+collision_base_size = 6.0
 amount = 600
 texture = SubResource("2")
 lifetime = 1.5

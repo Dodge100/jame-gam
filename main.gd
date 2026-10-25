@@ -4,7 +4,8 @@ extends Node2D
 @onready var _lose: Label = $UI/LoseLabel
 @onready var _level: Node2D = $Level
 @onready var _player: Node2D = $Player
-@onready var _rain: Node2D = $Level/WorldRain
+@onready var _rain: GPUParticles2D = $Level/WorldRain
+@onready var _rain_material: ParticleProcessMaterial = _rain.process_material
 
 var _dead := false
 var _distance := 0
@@ -17,8 +18,10 @@ func _ready() -> void:
 	_level.process_mode = Node.PROCESS_MODE_PAUSABLE
 
 func _process(_delta: float) -> void:
-	# Keep rain over the visible screen, since the camera only travels right.
-	_rain.global_position.x = (_player.view_left() + _player.view_right()) * 0.5
+	# Keep the emitter fixed so its collision transform stays stable.
+	var offset: float = (_player.view_left() + _player.view_right()) * 0.5 - _rain.global_position.x
+	_rain_material.emission_shape_offset.x = offset
+	_rain.visibility_rect.position.x = offset - 1200.0
 
 func _physics_process(_delta: float) -> void:
 	if _dead:
