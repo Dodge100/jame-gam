@@ -12,9 +12,15 @@ const GENERATE_AHEAD := 1400.0
 const KEEP_BEHIND := 400.0
 # storm debris: rain-born leaves fall into fresh spans and swing in the wind
 const LEAF_SCENE := preload("res://scenes/Leaf.tscn")
-const LEAF_LIFT_MIN := 240.0
-const LEAF_LIFT_MAX := 370.0
-const LEAF_SPAWN_MARGIN := 40.0
+const LEAF_LIFT_MIN := 200.0
+const LEAF_LIFT_MAX := 300.0
+# leaves kept alive at once, spawned only when the storm thins the field
+const LEAF_COUNT := 7
+# new leaves drop in past the right edge, never in sight, one per lane
+const LEAF_OFFSCREEN_MARGIN := 60.0
+const LEAF_SLOT_SPACING := 320.0
+# x of the next leaf slot, pushed past the right edge so drops never overlap
+var _next_slot_x := -INF
 
 var _rng := RandomNumberGenerator.new()
 var _segments: Array[StaticBody2D] = []
@@ -62,6 +68,10 @@ func stream_to(view_left: float, view_right: float) -> void:
 			leaf.queue_free()
 			_leaves.remove_at(i)
 
+	# hold a steady field: replace what drifted off or died on the ground
+	while _leaves.size() < LEAF_COUNT:
+		_spawn_leaf_burst(view_right)
+
 func _add_branch(at: Vector2) -> void:
 	var branch: StaticBody2D = BRANCH_SCENE.instantiate()
 	branch.position = at
@@ -92,25 +102,21 @@ func _add_segment(x: float, y: float, width: float) -> void:
 	top_line.color = Color(0.3, 0.36, 0.46, 0.3)
 	segment.add_child(top_line)
 
-	# leaves go in before the segment draw so the ground hides what lands
-	_scatter_leaves(x, y, width)
-
 	add_child(segment)
 	_segments.append(segment)
 
-# scatter rain leaves over the fresh span, above and behind the ground fill
-func _scatter_leaves(x: float, surface_y: float, width: float) -> void:
-	var count := 0
-	if _rng.randf() < 0.75:
-		count += 1
-	if _rng.randf() < 0.25:
-		count += 1
-	for i in count:
-		var leaf: Node2D = LEAF_SCENE.instantiate()
-		leaf.position = Vector2(
-			x + _rng.randf_range(LEAF_SPAWN_MARGIN, width - LEAF_SPAWN_MARGIN),
-			surface_y - _rng.randf_range(LEAF_LIFT_MIN, LEAF_LIFT_MAX)
-		)
-		leaf.setup(surface_y, x, x + width)
-		add_child(leaf)
-		_leaves.append(leaf)
+# loose debris dropped past the right edge, landing wherever it is blown to
+func _spawn_leaf_burst(view_right: float) -> void:
+	var surface_y := _rng.randf_range(MIN_SURFACE_Y, MAX_SURFACE_Y)
+	# step the slot on every drop so leaves queue up instead of stacking; the
+	# cursor resets when it runs past the strip being watched
+	if _next_slot_x > view_right + GENERATE_AHEAD * 0.5:
+		_next_slot_x = -INF
+	var x := maxf(view_right + LEAF_OFFSCREEN_MARGIN, _next_slot_x)
+	_next_slot_x = x + LEAF_SLOT_SPACING
+	var leaf: Node2D = LEAF_SCENE.instantiate()
+	leaf.position = Vector2(x + _rng.randf_range(0.0, LEAF_SLOT_SPACING * 0.4), surface_y - _rng.randf_range(LEAF_LIFT_MIN, LEAF_LIFT_MAX))
+	# may settle anywhere within reach of its drift before it fades out
+	leaf.setup(surface_y, x - 300.0, x + 900.0)
+	add_child(leaf)
+	_leaves.append(leaf)
