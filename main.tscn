@@ -1,9 +1,58 @@
-[gd_scene load_steps=5 format=3 uid="e55aa66bb7788cc9"]
+[gd_scene load_steps=10 format=3 uid="e55aa66bb7788cc9"]
 
 [ext_resource path="res://scenes/Level.tscn" type="PackedScene" id="1"]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id="2"]
 [ext_resource path="res://scenes/ViewportRain.tscn" type="PackedScene" id="3"]
 [ext_resource path="res://main.gd" type="Script" id="4"]
+
+[sub_resource type="StyleBoxFlat" id="card_panel"]
+bg_color = Color(0.05, 0.06, 0.09, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.36, 0.46, 0.5)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+content_margin_left = 40.0
+content_margin_top = 32.0
+content_margin_right = 40.0
+content_margin_bottom = 32.0
+
+[sub_resource type="StyleBoxFlat" id="btn_normal"]
+bg_color = Color(0.24, 0.24, 0.26, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="btn_hover"]
+bg_color = Color(0.29, 0.29, 0.31, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="btn_pressed"]
+bg_color = Color(0.19, 0.19, 0.21, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="btn_focus"]
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.62, 0.62, 0.64, 0.9)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 
 [node name="Main" type="Node2D"]
 script = ExtResource("4")
@@ -17,15 +66,6 @@ position = Vector2(150, 560)
 
 [node name="UI" type="CanvasLayer" parent="."]
 layer = 1000
-
-[node name="Instructions" type="Label" parent="UI"]
-position = Vector2(20, 16)
-size = Vector2(620, 30)
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.55, 0.62, 0.75, 0.7)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.7)
-theme_override_constants/outline_size = 6
-text = "ARROWS / WASD  move      SPACE / UP / W  jump      R  restart"
 
 [node name="DistanceLabel" type="Label" parent="UI"]
 anchors_preset = 1
@@ -43,17 +83,60 @@ theme_override_constants/outline_size = 6
 horizontal_alignment = 2
 text = "0 m"
 
-[node name="LoseLabel" type="Label" parent="UI" visible=false]
+[node name="GameOver" type="Control" parent="UI" visible=false]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 40
+
+[node name="Dim" type="ColorRect" parent="UI/GameOver"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.015, 0.03, 0.05, 0.62)
+
+[node name="Center" type="CenterContainer" parent="UI/GameOver"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Card" type="PanelContainer" parent="UI/GameOver/Center"]
+theme_override_styles/panel = SubResource("card_panel")
+
+[node name="Rows" type="VBoxContainer" parent="UI/GameOver/Center/Card"]
+custom_minimum_size = Vector2(460, 0)
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="UI/GameOver/Center/Card/Rows"]
+theme_override_font_sizes/font_size = 58
 theme_override_colors/font_color = Color(0.85, 0.35, 0.3, 1)
-theme_override_colors/font_outline_color = Color(0.05, 0.01, 0.01, 0.9)
+theme_override_colors/font_outline_color = Color(0.03, 0.01, 0.01, 0.95)
 theme_override_constants/outline_size = 12
 horizontal_alignment = 1
-vertical_alignment = 1
-text = "LOST IN THE RAIN
-PRESS R TO TRY AGAIN"
+text = "SWEPT AWAY"
+
+[node name="Distance" type="Label" parent="UI/GameOver/Center/Card/Rows"]
+theme_override_font_sizes/font_size = 44
+theme_override_colors/font_color = Color(1, 0.76, 0.42, 1)
+theme_override_colors/font_outline_color = Color(0.05, 0.03, 0.01, 0.9)
+theme_override_constants/outline_size = 8
+horizontal_alignment = 1
+text = "0 m"
+
+[node name="Replay" type="Button" parent="UI/GameOver/Center/Card/Rows"]
+custom_minimum_size = Vector2(260, 70)
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(0.86, 0.86, 0.89, 1)
+theme_override_styles/normal = SubResource("btn_normal")
+theme_override_styles/hover = SubResource("btn_hover")
+theme_override_styles/pressed = SubResource("btn_pressed")
+theme_override_styles/focus = SubResource("btn_focus")
+text = "REPLAY"
+
+[connection signal="pressed" from="UI/GameOver/Center/Card/Rows/Replay" to="." method="_on_replay_pressed"]

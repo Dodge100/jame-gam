@@ -1,7 +1,9 @@
 extends Node2D
 
 @onready var _distance_label: Label = $UI/DistanceLabel
-@onready var _lose: Label = $UI/LoseLabel
+@onready var _over: Control = $UI/GameOver
+@onready var _over_distance: Label = $UI/GameOver/Center/Card/Rows/Distance
+@onready var _replay_button: Button = $UI/GameOver/Center/Card/Rows/Replay
 @onready var _level: Node2D = $Level
 @onready var _player: Node2D = $Player
 @onready var _rain: GPUParticles2D = $Level/WorldRain
@@ -11,14 +13,14 @@ var _dead := false
 var _distance := 0
 
 func _ready() -> void:
-	_lose.visible = false
+	_over.visible = false
 	_distance_label.text = "0 m"
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_player.process_mode = Node.PROCESS_MODE_PAUSABLE
 	_level.process_mode = Node.PROCESS_MODE_PAUSABLE
 
 func _process(_delta: float) -> void:
-	# Keep the emitter fixed so its collision transform stays stable.
+	# keep the emitter fixed so its collision transform stays stable
 	var offset: float = (_player.view_left() + _player.view_right()) * 0.5 - _rain.global_position.x
 	_rain_material.emission_shape_offset.x = offset
 	_rain.visibility_rect.position.x = offset - 1200.0
@@ -34,12 +36,20 @@ func _physics_process(_delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("restart"):
-		get_tree().paused = false
-		get_tree().reload_current_scene()
+		_replay()
+
+# the menu clears away and the runner drops into the storm
+func _on_replay_pressed() -> void:
+	_replay()
+
+func _replay() -> void:
+	get_tree().paused = false
+	get_tree().reload_current_scene()
 
 func _die() -> void:
 	_dead = true
-	_lose.text = "LOST IN THE RAIN\n%d m\nPRESS R TO TRY AGAIN" % _distance
-	_lose.visible = true
 	_rain.visible = false
+	_over_distance.text = "%d m" % _distance
+	_over.visible = true
+	_replay_button.grab_focus()
 	get_tree().paused = true

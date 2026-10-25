@@ -39,6 +39,9 @@ var _progress_prime := false
 var _streak_mats: Array = []   # streak layer materials
 var _streak_bases: Array[float] = []
 var _rain_color := Color.WHITE
+# bound identities; base values recapture only when the device set changes
+var _streak_bound: Array = []
+var _particle_bound = null
 var _particle_mat = null       # world rain material
 var _patch_mat = null          # blur patch material
 
@@ -194,8 +197,12 @@ func _locate_devices() -> void:
 		progress_m = 0.0
 		_progress_prime = false
 	# remember the authored values so gusts can scale them without drift
-	_streak_bases.clear()
-	for m in _streak_mats:
-		_streak_bases.append(float(m.get_shader_parameter("intensity")))
-	if _particle_mat != null:
+	# only fresh binds may capture; rereading mutated values compounds gusts
+	if _streak_mats != _streak_bound:
+		_streak_bound = _streak_mats.duplicate()
+		_streak_bases.clear()
+		for m in _streak_mats:
+			_streak_bases.append(float(m.get_shader_parameter("intensity")))
+	if _particle_mat != null and _particle_mat != _particle_bound:
+		_particle_bound = _particle_mat
 		_rain_color = _particle_mat.color

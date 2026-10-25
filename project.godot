@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="jame gam 1"
-run/main_scene="res://main.tscn"
+config/name="Swept Away"
+run/main_scene="res://scenes/menu.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
