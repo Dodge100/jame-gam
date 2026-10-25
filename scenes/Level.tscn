@@ -1,288 +1,72 @@
-[gd_scene load_steps=15 format=3 uid="d44e66ff3355aa77"]
+[gd_scene format=3 uid="uid://li4je4k1mif2"]
 
-[ext_resource path="res://scenes/WorldRain.tscn" type="PackedScene" id="7"]
+[ext_resource type="Script" uid="uid://bukbf77d80kdd" path="res://scenes/Level.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/WorldRain.tscn" id="7"]
 
 [sub_resource type="Gradient" id="SkyGrad"]
-offsets = PackedFloat32Array(0.0, 0.5, 0.78, 1.0)
+offsets = PackedFloat32Array(0, 0.5, 0.78, 1)
 colors = PackedColorArray(0.012, 0.016, 0.028, 1, 0.03, 0.042, 0.062, 1, 0.02, 0.028, 0.045, 1, 0.008, 0.012, 0.02, 1)
 
 [sub_resource type="GradientTexture2D" id="SkyTex"]
 gradient = SubResource("SkyGrad")
 width = 256
 height = 256
-fill_from = Vector2(0, 0)
 fill_to = Vector2(0, 1)
 
 [sub_resource type="Gradient" id="FogGradDeep"]
-offsets = PackedFloat32Array(0.0, 0.4, 0.58, 0.78, 1.0)
+offsets = PackedFloat32Array(0, 0.4, 0.58, 0.78, 1)
 colors = PackedColorArray(0.42, 0.5, 0.58, 0, 0.42, 0.5, 0.58, 0.045, 0.42, 0.5, 0.58, 0.09, 0.42, 0.5, 0.58, 0.03, 0.42, 0.5, 0.58, 0)
 
 [sub_resource type="GradientTexture2D" id="FogTexDeep"]
 gradient = SubResource("FogGradDeep")
 width = 128
 height = 128
-fill_from = Vector2(0, 0)
 fill_to = Vector2(0, 1)
 
 [sub_resource type="Gradient" id="FogGradLow"]
-offsets = PackedFloat32Array(0.0, 0.5, 0.72, 0.88, 1.0)
+offsets = PackedFloat32Array(0, 0.5, 0.72, 0.88, 1)
 colors = PackedColorArray(0.5, 0.58, 0.66, 0, 0.5, 0.58, 0.66, 0, 0.5, 0.58, 0.66, 0.11, 0.5, 0.58, 0.66, 0.05, 0.5, 0.58, 0.66, 0)
 
 [sub_resource type="GradientTexture2D" id="FogTexLow"]
 gradient = SubResource("FogGradLow")
 width = 128
 height = 128
-fill_from = Vector2(0, 0)
 fill_to = Vector2(0, 1)
 
-[sub_resource type="Gradient" id="GlowGrad"]
-offsets = PackedFloat32Array(0.0, 0.35, 0.7, 1.0)
-colors = PackedColorArray(1, 1, 1, 0.85, 1, 1, 1, 0.45, 1, 1, 1, 0.13, 1, 1, 1, 0)
+[node name="Level" type="Node2D" unique_id=614946415]
+script = ExtResource("1")
 
-[sub_resource type="GradientTexture2D" id="GlowTex"]
-gradient = SubResource("GlowGrad")
-width = 128
-height = 128
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.5, 0)
-
-[sub_resource type="CanvasItemMaterial" id="AddBl"]
-blend_mode = 1
-
-[sub_resource type="RectangleShape2D" id="GroundShape"]
-size = Vector2(1700, 120)
-
-[sub_resource type="RectangleShape2D" id="PlatShape"]
-size = Vector2(220, 36)
-
-[sub_resource type="RectangleShape2D" id="StepShape"]
-size = Vector2(200, 200)
-
-[sub_resource type="RectangleShape2D" id="WallShape"]
-size = Vector2(32, 720)
-
-[sub_resource type="RectangleShape2D" id="PillShape"]
-size = Vector2(30, 130)
-
-[node name="Level" type="Node2D"]
-
-[node name="Parallax" type="ParallaxBackground" parent="."]
+[node name="Parallax" type="ParallaxBackground" parent="." unique_id=638702860]
 layer = -10
 
-[node name="SkyLayer" type="ParallaxLayer" parent="Parallax"]
+[node name="SkyLayer" type="ParallaxLayer" parent="Parallax" unique_id=976261069]
 motion_scale = Vector2(0, 0)
 
-[node name="Sky" type="Sprite2D" parent="Parallax/SkyLayer"]
+[node name="Sky" type="Sprite2D" parent="Parallax/SkyLayer" unique_id=694120748]
 position = Vector2(-300, -560)
 scale = Vector2(13, 5.25)
 texture = SubResource("SkyTex")
 centered = false
 
-[node name="FogDeepLayer" type="ParallaxLayer" parent="Parallax"]
+[node name="FogDeepLayer" type="ParallaxLayer" parent="Parallax" unique_id=447736459]
 motion_scale = Vector2(0.04, 0)
+motion_mirroring = Vector2(1664, 0)
 
-[node name="FogDeep" type="Sprite2D" parent="Parallax/FogDeepLayer"]
+[node name="FogDeep" type="Sprite2D" parent="Parallax/FogDeepLayer" unique_id=129381261]
 position = Vector2(-300, -520)
 scale = Vector2(13, 5.2)
 texture = SubResource("FogTexDeep")
 centered = false
 
-[node name="FogLowLayer" type="ParallaxLayer" parent="Parallax"]
+[node name="FogLowLayer" type="ParallaxLayer" parent="Parallax" unique_id=2051399533]
 motion_scale = Vector2(0.6, 0)
+motion_mirroring = Vector2(1664, 0)
 
-[node name="FogLow" type="Sprite2D" parent="Parallax/FogLowLayer"]
+[node name="FogLow" type="Sprite2D" parent="Parallax/FogLowLayer" unique_id=43954463]
 position = Vector2(-500, -460)
 scale = Vector2(13, 5.2)
 texture = SubResource("FogTexLow")
 centered = false
 
-[node name="Ground" type="StaticBody2D" parent="."]
-
-[node name="Visual" type="ColorRect" parent="Ground"]
-offset_left = 0.0
-offset_top = 600.0
-offset_right = 1700.0
-offset_bottom = 720.0
-color = Color(0.07, 0.08, 0.11, 1)
-
-[node name="TopLine" type="ColorRect" parent="Ground"]
-offset_left = 0.0
-offset_top = 600.0
-offset_right = 1700.0
-offset_bottom = 604.0
-color = Color(0.3, 0.36, 0.46, 0.25)
-
-[node name="GroundCollision" type="CollisionShape2D" parent="Ground"]
-position = Vector2(850, 660)
-shape = SubResource("GroundShape")
-
-[node name="Refl1" type="Sprite2D" parent="."]
-material = SubResource("AddBl")
-position = Vector2(320, 642)
-scale = Vector2(0.8, 0.28)
-modulate = Color(0.5, 0.6, 0.75, 0.10)
-texture = SubResource("GlowTex")
-
-[node name="Refl2" type="Sprite2D" parent="."]
-material = SubResource("AddBl")
-position = Vector2(780, 645)
-scale = Vector2(1.1, 0.34)
-modulate = Color(0.5, 0.6, 0.75, 0.10)
-texture = SubResource("GlowTex")
-
-[node name="Refl3" type="Sprite2D" parent="."]
-material = SubResource("AddBl")
-position = Vector2(1240, 635)
-scale = Vector2(0.7, 0.24)
-modulate = Color(0.5, 0.6, 0.75, 0.08)
-texture = SubResource("GlowTex")
-
-[node name="Refl4" type="Sprite2D" parent="."]
-material = SubResource("AddBl")
-position = Vector2(1520, 650)
-scale = Vector2(0.75, 0.26)
-modulate = Color(0.5, 0.6, 0.75, 0.08)
-texture = SubResource("GlowTex")
-
-[node name="Platform1" type="StaticBody2D" parent="."]
-
-[node name="Visual" type="ColorRect" parent="Platform1"]
-offset_left = 260.0
-offset_top = 480.0
-offset_right = 480.0
-offset_bottom = 516.0
-color = Color(0.085, 0.1, 0.14, 1)
-
-[node name="TopLine" type="ColorRect" parent="Platform1"]
-offset_left = 260.0
-offset_top = 480.0
-offset_right = 480.0
-offset_bottom = 483.0
-color = Color(0.3, 0.35, 0.44, 0.3)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform1"]
-position = Vector2(370, 498)
-shape = SubResource("PlatShape")
-
-[node name="Platform2" type="StaticBody2D" parent="."]
-
-[node name="Visual" type="ColorRect" parent="Platform2"]
-offset_left = 700.0
-offset_top = 400.0
-offset_right = 920.0
-offset_bottom = 436.0
-color = Color(0.09, 0.105, 0.15, 1)
-
-[node name="TopLine" type="ColorRect" parent="Platform2"]
-offset_left = 700.0
-offset_top = 400.0
-offset_right = 920.0
-offset_bottom = 403.0
-color = Color(0.3, 0.35, 0.44, 0.3)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform2"]
-position = Vector2(810, 418)
-shape = SubResource("PlatShape")
-
-[node name="Platform3" type="StaticBody2D" parent="."]
-
-[node name="Visual" type="ColorRect" parent="Platform3"]
-offset_left = 1140.0
-offset_top = 480.0
-offset_right = 1360.0
-offset_bottom = 516.0
-color = Color(0.085, 0.1, 0.14, 1)
-
-[node name="TopLine" type="ColorRect" parent="Platform3"]
-offset_left = 1140.0
-offset_top = 480.0
-offset_right = 1360.0
-offset_bottom = 483.0
-color = Color(0.3, 0.35, 0.44, 0.3)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform3"]
-position = Vector2(1250, 498)
-shape = SubResource("PlatShape")
-
-[node name="Platform4" type="StaticBody2D" parent="."]
-
-[node name="Visual" type="ColorRect" parent="Platform4"]
-offset_left = 1400.0
-offset_top = 400.0
-offset_right = 1620.0
-offset_bottom = 436.0
-color = Color(0.09, 0.105, 0.15, 1)
-
-[node name="TopLine" type="ColorRect" parent="Platform4"]
-offset_left = 1400.0
-offset_top = 400.0
-offset_right = 1620.0
-offset_bottom = 403.0
-color = Color(0.3, 0.35, 0.44, 0.3)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform4"]
-position = Vector2(1510, 418)
-shape = SubResource("PlatShape")
-
-[node name="Step" type="StaticBody2D" parent="."]
-
-[node name="Visual" type="ColorRect" parent="Step"]
-offset_left = 1500.0
-offset_top = 400.0
-offset_right = 1700.0
-offset_bottom = 600.0
-color = Color(0.085, 0.1, 0.145, 1)
-
-[node name="TopLine" type="ColorRect" parent="Step"]
-offset_left = 1500.0
-offset_top = 400.0
-offset_right = 1700.0
-offset_bottom = 403.0
-color = Color(0.3, 0.35, 0.44, 0.3)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Step"]
-position = Vector2(1600, 500)
-shape = SubResource("StepShape")
-
-[node name="StartWall" type="StaticBody2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StartWall"]
-position = Vector2(-16, 360)
-shape = SubResource("WallShape")
-
-[node name="EndWall" type="StaticBody2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EndWall"]
-position = Vector2(1684, 300)
-shape = SubResource("WallShape")
-
-[node name="Goal" type="Area2D" parent="."]
-
-[node name="Glow" type="Sprite2D" parent="Goal"]
-material = SubResource("AddBl")
-position = Vector2(1575, 335)
-scale = Vector2(1.9, 1.9)
-modulate = Color(0.9, 0.55, 0.25, 0.32)
-texture = SubResource("GlowTex")
-
-[node name="Visual" type="ColorRect" parent="Goal"]
-offset_left = 1560.0
-offset_top = 270.0
-offset_right = 1590.0
-offset_bottom = 400.0
-color = Color(0.8, 0.47, 0.2, 1)
-
-[node name="Cap" type="ColorRect" parent="Goal"]
-offset_left = 1556.0
-offset_top = 264.0
-offset_right = 1594.0
-offset_bottom = 272.0
-color = Color(0.92, 0.62, 0.36, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Goal"]
-position = Vector2(1575, 335)
-shape = SubResource("PillShape")
-
-[node name="WorldRain" parent="." instance=ExtResource("7")]
+[node name="WorldRain" parent="." unique_id=125074587 instance=ExtResource("7")]
 position = Vector2(850, 260)

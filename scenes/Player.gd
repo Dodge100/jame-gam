@@ -57,6 +57,9 @@ func is_out_of_view() -> bool:
 func is_behind_view() -> bool:
 	return global_position.x + 8.0 < view_left()
 
+func is_below_view() -> bool:
+	return global_position.y - 8.0 > view_top_y + _cam.get_viewport_rect().size.y
+
 func _advance_camera(delta: float) -> void:
 	_cam_x += scroll_speed * delta
 	_cam.global_position = Vector2(_cam_x, _view_center_y())
